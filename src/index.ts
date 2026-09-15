@@ -17,9 +17,18 @@ app.get("/tasks", (req, res) => {
    res.json(tasks);
   });
 
+  app.patch("/tasks/:id",(req,res)=>{
+    const id=Number(req.params.id);
+    const task= tasks.find(task=>task.id===id);
+    if(!task){
+        return res.status(404).json({error:"Task not found"});}
+    task.completed=true;
+    return res.status(201).json(task);
+      });
+
   app.post("/tasks",(req,res)=>{
     const title= req.body.title;
-if(!title || type of title !=="string"){
+if(!title || typeof title !=="string"){
     return res.status(400).json({
 error:"Title is required and must be a string"
     });
@@ -35,3 +44,4 @@ error:"Title is required and must be a string"
 
     res.status(201).json(task);
   });
+
