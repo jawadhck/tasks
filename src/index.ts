@@ -1,3 +1,4 @@
+
 import type { Task } from "./types.ts"
 import express from "express";
 
@@ -29,7 +30,7 @@ app.get("/tasks", (req, res) => {
       });
 
   app.post("/tasks",(req,res)=>{
-    const title= req.body?.title;
+    const title= req.body.title;
 if(!title || typeof title !=="string"){
     return res.status(400).json({
 error:"Title is required and must be a string"
@@ -48,15 +49,29 @@ error:"Title is required and must be a string"
   });
 
   app.get("/tasks/:id", (req,res)=>{
-const id=Number(req.params.id);
-const task= tasks.find(t=>t.id===id);
-if(!task){
-  return res.status(404).json({error:"Task not found"});}
-  return res.status(200).json(task);
-  });
+    const id=Number(req.params.id);
+    const task= tasks.find(t=>t.id===id);
+    if(!task){
+      return res.status(404).json({error:"Task not found"});}
+      return res.status(200).json(task);
+      });
 
+      app.delete("/tasks/:id",(req,res)=>{
+const id=Number(req.params.id);
+const index=tasks.findIndex((t)=>t.id===id);
+if(index===-1){
+    return res.status(404).json({error:"Task not found"});
+}
+const deleted=tasks.splice(index,1);
+return res.status(200).json(deleted);
+      });
 
   app.listen(3000, () => {
     
     console.log("Server running on port 3000");
   });
+
+
+
+
+
