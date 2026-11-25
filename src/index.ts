@@ -22,15 +22,19 @@ app.get("/tasks", (req, res) => {
 
   app.patch("/tasks/:id",(req,res)=>{
     const id=Number(req.params.id);
+    const completed=req.body?.completed;
     const task= tasks.find(t=>t.id===id);
     if(!task){
         return res.status(404).json({error:"Task not found"});}
-    task.completed=true;
+        if(typeof completed!=="boolean"){
+          return res.status(400).json({error:"completed is required"});
+        }
+    task.completed=completed;
     return res.status(200).json(task);
       });
 
   app.post("/tasks",(req,res)=>{
-    const title= req.body.title;
+    const title= req.body?.title;
 if(!title || typeof title !=="string"){
     return res.status(400).json({
 error:"Title is required and must be a string"
